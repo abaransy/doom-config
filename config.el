@@ -1,28 +1,3 @@
-;;; config.el --- Description -*- lexical-binding: t; -*-
-;;
-;; Copyright (C) 2021 John Doe
-;;
-;; Author: John Doe <https://github.com/aatefbaransy>
-;; Maintainer: John Doe <john@doe.com>
-;; Created: November 28, 2021
-;; Modified: November 28, 2021
-;; Version: 0.0.1
-;; Keywords: abbrev bib c calendar comm convenience data docs emulations extensions faces files frames games hardware help hypermedia i18n internal languages lisp local maint mail matching mouse multimedia news outlines processes terminals tex tools unix vc wp
-;; Homepage: https://github.com/aatefbaransy/config
-;; Package-Requires: ((emacs "24.3"))
-;;
-;; This file is not part of GNU Emacs.
-;;
-;;; Commentary:
-;;
-;;  Description
-;;
-;;; Code:
-
-
-
-(provide 'config)
-;;; config.el ends here
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
@@ -114,13 +89,11 @@
 
 ;; Functions to format files on save using eslint and prettier
 (defun eslint-fix-file ()
-  (interactive)
   (message "eslint --fixing the file" (buffer-file-name))
   (call-process-shell-command (concat "eslint --fix " (buffer-file-name))))
 
 (defun prettier-fix-file ()
-  (interactive)
-  (message "eslint --fixing the file" (buffer-file-name))
+  (message "prettifying the file" (buffer-file-name))
   (call-process-shell-command (concat "prettier -w " (buffer-file-name))))
 
 (defun eslint-fix-file-and-revert ()
@@ -133,7 +106,19 @@
 
 (defun fix-file ()
   (interactive)
-  (eslint-fix-file-and-revert)
-  (prettier-fix-file-and-revert))
+  (prettier-fix-file-and-revert)
+  (eslint-fix-file-and-revert))
 
 (global-set-key (kbd "C-x c") 'fix-file)
+
+
+;; Configure auto saving
+(setq auto-save-interval 1)
+(setq auto-save-timeout 1)
+(defun save-buffer-if-visiting-file (&optional args)
+   "Save the current buffer only if it is visiting a file"
+   (interactive)
+   (if (and (buffer-file-name) (buffer-modified-p))
+       (save-buffer args)))
+
+(add-hook 'auto-save-hook 'save-buffer-if-visiting-file)
