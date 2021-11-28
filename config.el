@@ -58,12 +58,12 @@
 
 
 ;; Automatically turn on smerge if merge conflicts are detected
-  (defun sm-try-smerge ()
-    (save-excursion
-      (goto-char (point-min))
-      (when (re-search-forward "^<<<<<<< " nil t)
-        (smerge-mode 1))))
-  (add-hook 'find-file-hook 'sm-try-smerge t)
+(defun sm-try-smerge ()
+  (save-excursion
+    (goto-char (point-min))
+    (when (re-search-forward "^<<<<<<< " nil t)
+      (smerge-mode 1))))
+(add-hook 'find-file-hook 'sm-try-smerge t)
 ;; Change smerge prefix
 ;; (setq smerge-command-prefix "\C-cv")
 
@@ -106,6 +106,7 @@
 
 (defun fix-file ()
   (interactive)
+  (save-buffer)
   (prettier-fix-file-and-revert)
   (eslint-fix-file-and-revert))
 
@@ -113,8 +114,8 @@
 
 
 ;; Configure auto saving
-(setq auto-save-interval 1)
-(setq auto-save-timeout 1)
+(setq auto-save-interval 300)
+(setq auto-save-timeout 10)
 (defun save-buffer-if-visiting-file (&optional args)
    "Save the current buffer only if it is visiting a file"
    (interactive)
