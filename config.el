@@ -106,9 +106,10 @@
 
 (defun fix-file ()
   (interactive)
-  (save-buffer)
-  (prettier-fix-file-and-revert)
-  (eslint-fix-file-and-revert))
+  (when (yes-or-no-p (format "Save and format file %s? " buffer-file-name))
+        (save-buffer)
+        (prettier-fix-file-and-revert)
+        (eslint-fix-file-and-revert)))
 
 (global-set-key (kbd "C-x c") 'fix-file)
 
@@ -123,3 +124,9 @@
        (save-buffer args)))
 
 (add-hook 'auto-save-hook 'save-buffer-if-visiting-file)
+
+
+;; Add Todo states for org mode todos
+(after! org
+  (setq org-todo-keywords
+        '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE" "KILL"))))
