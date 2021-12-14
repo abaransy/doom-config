@@ -19,7 +19,7 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font "Operator Mono Book Italic 16"
+(setq doom-font "Operator Mono Medium Italic 16"
        doom-variable-pitch-font (font-spec :family "Operator Mono" :size 16 :weight 'book))
 
 (after! doom-themes
