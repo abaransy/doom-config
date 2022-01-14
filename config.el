@@ -19,7 +19,7 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font "Operator Mono Medium Italic 16"
+(setq doom-font "Operator Mono Book Italic 18"
        doom-variable-pitch-font (font-spec :family "Operator Mono" :size 16 :weight 'book))
 
 (after! doom-themes
@@ -69,16 +69,16 @@
 
 
 ;; Function and hook to search node_modules for eslint before using global one
-(defun my/use-eslint-from-node-modules ()
-  (let* ((root (locate-dominating-file
-                (or (buffer-file-name) default-directory)
-                "node_modules"))
-         (eslint (and root
-                      (expand-file-name "node_modules/eslint/bin/eslint.js"
-                                        root))))
-    (when (and eslint (file-executable-p eslint))
-      (setq-local flycheck-javascript-eslint-executable eslint))))
-(add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+;;(defun my/use-eslint-from-node-modules ()
+;;  (let* ((root (locate-dominating-file
+;;                (or (buffer-file-name) default-directory)
+;;                "node_modules"))
+;;         (eslint (and root
+;;                      (expand-file-name "node_modules/eslint/bin/eslint.js"
+;;                                        root))))
+;;    (when (and eslint (file-executable-p eslint))
+;;      (setq-local flycheck-javascript-eslint-executable eslint))))
+;;(add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
 
 
 ;; Request to disable certain checkers
@@ -159,3 +159,5 @@
     (insert (shell-command-to-string "pbpaste"))
     )
   )
+
+(setq auth-sources '("~/.authinfo.gpg"))
