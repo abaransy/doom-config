@@ -94,7 +94,7 @@
 
 (defun prettier-fix-file ()
   (message "prettifying the file" (buffer-file-name))
-  (call-process-shell-command (concat "prettier --print-width 80 -w " (buffer-file-name))))
+  (call-process-shell-command (concat "prettier -w print-width" (buffer-file-name))))
 
 (defun eslint-fix-file-and-revert ()
   (eslint-fix-file)
@@ -118,11 +118,11 @@
 (defun fix-diff ()
   (interactive)
   (when (yes-or-no-p (format "Save and format diff?"))
-    (call-process-shell-command (format "git diff --name-only %s $(git merge-base %s %s) | xargs prettier -w"
+    (call-process-shell-command (format "git diff --name-only --diff-filter=M %s $(git merge-base %s %s) | xargs prettier -w"
                                         (magit-get-current-branch)
                                         (magit-get-current-branch)
                                         (magit-get-upstream-branch)))
-   (call-process-shell-command (format "git diff --name-only %s $(git merge-base %s %s) | xargs eslint --fix"
+   (call-process-shell-command (format "git diff --name-only --diff-filter=M %s $(git merge-base %s %s) | xargs eslint --fix"
                                         (magit-get-current-branch)
                                         (magit-get-current-branch)
                                         (magit-get-upstream-branch)))))
