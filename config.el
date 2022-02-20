@@ -19,7 +19,7 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font "Operator Mono Book Italic 18"
+(setq doom-font "Operator Mono Medium 18"
        doom-variable-pitch-font (font-spec :family "Operator Mono" :size 16 :weight 'book))
 
 (after! doom-themes
@@ -28,7 +28,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-;; (setq doom-theme 'manoj-dark)
+(setq doom-theme 'manoj-dark)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -94,7 +94,7 @@
 
 (defun prettier-fix-file ()
   (message "prettifying the file" (buffer-file-name))
-  (call-process-shell-command (concat "prettier -w print-width" (buffer-file-name))))
+  (call-process-shell-command (concat "prettier --print-width 80 -w " (buffer-file-name))))
 
 (defun eslint-fix-file-and-revert ()
   (eslint-fix-file)
@@ -118,13 +118,9 @@
 (defun fix-diff ()
   (interactive)
   (when (yes-or-no-p (format "Save and format diff?"))
-    (call-process-shell-command (format "git diff --name-only --diff-filter=M %s $(git merge-base %s %s) | xargs prettier -w"
-                                        (magit-get-current-branch)
-                                        (magit-get-current-branch)
+    (call-process-shell-command (format "git diff --name-only --diff-filter=d %s | xargs prettier -w"
                                         (magit-get-upstream-branch)))
-   (call-process-shell-command (format "git diff --name-only --diff-filter=M %s $(git merge-base %s %s) | xargs eslint --fix"
-                                        (magit-get-current-branch)
-                                        (magit-get-current-branch)
+   (call-process-shell-command (format "git diff --name-only --diff-filter=d %s | xargs eslint --fix"
                                         (magit-get-upstream-branch)))))
 
 (global-set-key (kbd "C-x j") 'fix-diff)
