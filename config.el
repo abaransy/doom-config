@@ -19,8 +19,8 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font "Operator Mono Medium 18"
-       doom-variable-pitch-font (font-spec :family "Operator Mono" :size 16 :weight 'book))
+(setq doom-font "Operator Mono Book 16"
+       doom-variable-pitch-font (font-spec :family "Operator Mono" :size 18 :weight 'book))
 
 (after! doom-themes
   (setq doom-themes-enable-bold t
@@ -28,7 +28,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'manoj-dark)
+(setq doom-theme 'doom-old-hope)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -94,7 +94,7 @@
 
 (defun prettier-fix-file ()
   (message "prettifying the file" (buffer-file-name))
-  (call-process-shell-command (concat "prettier --print-width 80 -w " (buffer-file-name))))
+  (call-process-shell-command (concat "prettier -w " (buffer-file-name))))
 
 (defun eslint-fix-file-and-revert ()
   (eslint-fix-file)
@@ -115,15 +115,19 @@
 
 
 ;;Functions to format the diff.
-(defun fix-diff ()
-  (interactive)
-  (when (yes-or-no-p (format "Save and format diff?"))
-    (call-process-shell-command (format "git diff --name-only --diff-filter=d %s | xargs prettier -w"
-                                        (magit-get-upstream-branch)))
-   (call-process-shell-command (format "git diff --name-only --diff-filter=d %s | xargs eslint --fix"
-                                        (magit-get-upstream-branch)))))
-
-(global-set-key (kbd "C-x j") 'fix-diff)
+;;(defun fix-diff ()
+;;  (interactive)
+;;  (when (yes-or-no-p (format "Save and format diff?"))
+;;        (call-process-shell-command (format "git diff --name-only --diff-filter=M %s..%s | xargs prettier -w"
+;;                                        (magit-get-current-branch)
+;;                                        (magit-get-upstream-branch)
+;;                                        ))
+;;        (call-process-shell-command (format "git diff --name-only --diff-filter=M s..%s | xargs eslint --fix"
+;;                                        (magit-get-current-branch)
+;;                                        (magit-get-upstream-branch)
+;;                                       ))))
+;;
+;;(global-set-key (kbd "C-x j") 'fix-diff)
 
 
 ;; Configure auto saving
@@ -178,3 +182,26 @@
 ;; add a keybinding for opening the code review transient api
 (global-set-key (kbd "C-x t") 'code-review-transient-api)
 (global-set-key (kbd "C-x n") 'code-review-comment-jump-next)
+
+;; configure doom for tsx support
+;; make sure to install tree-sitter and tree-sitter-langs
+(use-package typescript-mode
+  :ensure t
+  :init
+  (define-derived-mode typescript-tsx-mode typescript-mode "tsx")
+  :config
+  (setq typescript-indent-level 2)
+  (add-hook 'typescript-mode #'subword-mode)
+  (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescript-tsx-mode)))
+
+(use-package tree-sitter
+  :ensure t
+  :hook ((typescript-mode . tree-sitter-hl-mode)
+	 (typescript-tsx-mode . tree-sitter-hl-mode)))
+
+(use-package tree-sitter-langs
+  :ensure t
+  :after tree-sitter
+  :config
+  (tree-sitter-require 'tsx)
+  (add-to-list 'tree-sitter-major-mode-language-alist '(typescript-tsx-mode . tsx)))
