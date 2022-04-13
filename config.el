@@ -185,7 +185,6 @@
 
 ;; configure doom for tsx support
 ;; make sure to install tree-sitter and tree-sitter-langs
-;; https://github.com/emacs-typescript/typescript.el/issues/4
 (use-package typescript-mode
   :ensure t
   :init
@@ -197,7 +196,8 @@
 
 (use-package tree-sitter
   :ensure t
-  :hook ((typescript-mode . tree-sitter-hl-mode)
+  :hook ((js-mode . tree-sitter-hl-mode)
+         (typescript-mode . tree-sitter-hl-mode)
 	 (typescript-tsx-mode . tree-sitter-hl-mode)))
 
 (use-package tree-sitter-langs
