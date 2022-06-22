@@ -1,3 +1,5 @@
+
+
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
@@ -20,7 +22,7 @@
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
 (setq doom-font "Operator Mono Book 16"
-       doom-variable-pitch-font (font-spec :family "Operator Mono" :size 18 :weight 'book))
+       doom-variable-pitch-font (font-spec :family "Operator Mono" :size 16 :weight 'book))
 
 (after! doom-themes
   (setq doom-themes-enable-bold t
